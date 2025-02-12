@@ -1,7 +1,12 @@
-function App() {
+import Ravi from "./Ravi"
 
+function App() {
+  const Intro = 'I am Computer Science Student';
   return (
-    <h1>Chai aur React with vite | Ravi Saini </h1>
+    <>
+      <Ravi/>
+      <h1>I am a Engineering Student. {Intro}</h1>
+    </>
   )
 }
 
