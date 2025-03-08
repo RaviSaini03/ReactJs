@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expence Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="expence-tracker">
+        <h1>Expence Tracker</h1>
+        <div class="main">
+
+            <div class="left-container">
+                <div class="current-amount">
+                    <h2>Current Amount</h2>
+                    <h3 id="currentAmount">₹<span id="currentAmount1"></span></h3>
+                </div>
+                <div class="amount-tracker">
+                    <div class="total-amount">
+                        <p>Total Amount</p>
+                        <p id="total">₹<span id="total1"></span></p>
+                    </div>
+                    <div class="spent-amount">
+                        <p>Total Expenditure</p>
+                        <p id="spent">-₹<span id="spent1"></span></p>
+                    </div>
+                </div>
+                <div class="inputSection">
+                    <input id="totalAmountInput" class="inputBar" type="text" placeholder="Enter Your Amount">
+                    <button id="totalAmountBtn" class="inputBtn">Start</button>
+                </div>
+            </div>
+
+            <div class="devider">
+            </div>
+
+            <div class="right-container">
+                
+                <div>
+                    <div class="expenditure">
+                        <p>Asset Name</p>
+                        <div class="inputSection">
+                            <input id="assetNameInput" class="inputBar" type="text" placeholder="Enter the asset of your expenditure">
+                        </div>
+                    </div>
+                    <div class="expenditure">
+                        <p>Amount</p>
+                        <div class="inputSection">
+                            <input id="totalAmountSpentInput" class="inputBar" type="text" placeholder="Enter the total amount spent on asset">
+                            <button id="totalAmountSpentBtn" class="inputBtn">Add</button>
+                        </div>
+                    </div>
+                    <div class="spent-items" id="spentItems">
+                        <!-- //expenditures will add here -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        // left container elements 
+        const currentAmount = document.querySelector('#currentAmount1')
+        const totalAmount = document.querySelector('#total1')
+        const totalSpentAmount = document.querySelector('#spent1')
+        const enterAmount = document.querySelector('#totalAmountInput')
+        const submitEnterAmount = document.querySelector('#totalAmountBtn')
+        
+        // right conteiner elements
+        const assetName = document.querySelector('#assetNameInput')
+        const amountSpent = document.querySelector('#totalAmountSpentInput')
+        const assetSpentBtn = document.querySelector('#totalAmountSpentBtn')
+        const container = document.querySelector('#spentItems')
+        const removeButton = document.querySelector('.removebutton')
+        const listExpence = document.querySelector('#todoTask')
+        
+
+        let changingCurrentAmount = 0;
+
+        let totalSpent = 0
+
+    
+        // entering total amount and submiting
+        submitEnterAmount.addEventListener('click', () => {
+            const submitAmount = enterAmount.value;
+            changingCurrentAmount = submitAmount
+            if (submitAmount !== '') {
+                totalAmount.innerHTML = submitAmount
+                currentAmount.innerHTML = parseFloat(submitAmount)
+                changingCurrentAmount = submitAmount
+                enterAmount.value = ''
+            } else {
+                alert("enter some ammount");
+            }
+        })
+
+        function addExpences() {
+            const newExpence = document.createElement('div')
+            newExpence.classList.add('task')
+            const asset = assetName.value;
+            const expence = parseFloat(amountSpent.value);
+            totalSpent += expence
+            changingCurrentAmount -= expence
+
+            if (asset !== '' && expence !== '') {
+                newExpence.innerHTML = `
+                    <div class="expenceList">
+                        <p id="toDoTask1">⚫&nbsp ${asset}</p>
+                        <p id="toDoTask">-₹${expence}</p>
+                    </div>
+                    <button class="removeButton">✗</button>
+                `;
+                assetName.value = ''
+                amountSpent.value = ''
+            } else {
+                alert('Enter name of assest and expence');
+            }
+            
+            container.appendChild(newExpence);
+        }
+
+        assetSpentBtn.addEventListener('click', () => {
+            addExpences();
+            console.log(totalSpent)
+            totalSpentAmount.innerHTML = totalSpent
+            if(changingCurrentAmount > 0) {
+                currentAmount.innerHTML = changingCurrentAmount
+            } else {
+                alert('Enter Total amount First');
+            }
+        })
+
+        // removeButton.addEventListener('click', () => {
+        //     const expence = parseFloat(listExpence.innerHTML)
+        //     totalSpent -= expence
+        //     totalSpentAmount.innerHTML = totalSpent
+        //     changingCurrentAmount += expence
+        //     currentAmount.innerHTML = changingCurrentAmount
+        // })
+
+        container.addEventListener('click', (event) => {
+            if(event.target.classList.contains('removeButton')) {
+                const expenceText = event.target.previousElementSibling.lastElementChild.innerText;
+                const expenceValue = parseFloat(expenceText.replace('-₹', ''))
+
+                totalSpent -= expenceValue;
+                totalSpentAmount.innerHTML = totalSpent;
+                changingCurrentAmount += expenceValue;
+                currentAmount.innerHTML = changingCurrentAmount;
+
+                event.target.parentElement.remove();
+            }
+        })
+    
+    </script>
+</body>
+</html>
